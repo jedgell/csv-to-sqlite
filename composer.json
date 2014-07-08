@@ -1,0 +1,15 @@
+{
+    "name":             "edgellj/csv-to-sqlite",
+    "description":      "A tool for quickly migrating CSV files to SQLite.",
+    "keywords":         ["sqlite", "csv", "php"],
+    "homepage":         "https://github.com/jedgell/csv-to-sqlite",
+    "license":          "GPL v2",
+    "authors": [
+        {
+            "name":         "Jeremy Edgell",
+            "email":        "edgellj@gmail.com",
+            "homepage":     "http://classically.me",
+            "role":         "Happy recipient of strokes of dumb luck."
+        }
+    ]
+}
