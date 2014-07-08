@@ -107,7 +107,7 @@ function do_table_insert($database, $headers, $placeholders, $data, $type) {
   foreach ($data as $values) {
     $i = 0;
     foreach($values as $value) {
-      $statement->bindParam($headers[$i], $value);
+      $statement->bindParam($placeholders[$i], $value);
       $i++;
     }
     // Execute the statement
