@@ -1,4 +1,3 @@
-
 <?php
 
 // Example usage
@@ -114,8 +113,3 @@ function do_table_insert($database, $headers, $placeholders, $data, $type) {
     $statement->execute();
   }
 }
-
-
-
-
-
