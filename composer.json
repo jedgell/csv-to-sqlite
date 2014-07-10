@@ -14,7 +14,7 @@
     ],
     "autoload": {
         "classmap": [
-            "src/Edgellj/CsvToSqlite"
+            "src/CsvToSqlite/Framework"
         ]
     }
 }
