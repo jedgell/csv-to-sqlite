@@ -54,17 +54,7 @@ function clean_and_parse_data(&$csv_line_items, &$return_array, &$return_headers
 }
 
 function header_alter(&$val, $key) {
-  $replace = array(
-    ' ',
-    '/',
-    '-',
-  );
-  $remove = array(
-    ' @',
-    ' #',
-    '.',
-  );
-  $val = strtolower(str_replace($replace, '_', str_replace($remove, '', $val)));
+  $val = strtolower(preg_replace("/[^\w\d]/ui", '', $string));
 }
 
 function create_placeholders($headers) {
