@@ -3,7 +3,7 @@
     "description":      "A tool for quickly migrating CSV files to SQLite.",
     "keywords":         ["sqlite", "csv", "php"],
     "homepage":         "https://github.com/jedgell/csv-to-sqlite",
-    "license":          "GPL v2",
+    "license":          "GPL-3.0",
     "authors": [
         {
             "name":         "Jeremy Edgell",
@@ -12,9 +12,15 @@
             "role":         "Happy recipient of strokes of dumb luck."
         }
     ],
+    "require": {
+        "php": ">=5.3.0"
+    },
     "autoload": {
         "classmap": [
-            "src/CsvToSqlite/Framework"
-        ]
+            "src/AttoUtils/CSVtoSQLite"
+        ],
+        "psr-4": {
+            "AttoUtils\\CSVtoSQLite\\": "src/AttoUtils/CSVtoSQLite"
+        }
     }
 }
