@@ -18,10 +18,11 @@ function remove_utc($file) {
 $config =  array(
     'database' => array(
       'type' => 'file',
-      'file_path' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data',
+      'file_path' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'processed',
       'file_name' => 'example.sqlite3',
     ),
     'files' => array (
+      // dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'States.csv' => array(),
       dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Countries.csv' => array(
         'delimeter' => '|',
         'enclosure' => '"',
@@ -47,4 +48,4 @@ $config =  array(
   );
 
 $a = new AttoUtils\CSVtoSQLite\Controller($config);
-var_dump($a);
+//var_dump($a);
