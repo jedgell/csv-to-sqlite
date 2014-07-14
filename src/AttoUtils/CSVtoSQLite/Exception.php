@@ -48,19 +48,3 @@ class Exception extends \Exception {
     }
 
 }
-
-
-// function exceptionTest()
-// {
-//     try {
-//         throw new Exception(100, array('lolly pop', 'baby'));
-//     }
-//     catch (Exception $e) {
-//         echo "Caught TestException ('{$e->getMessage()}')\n{$e}\n";
-//     }
-//     catch (Exception $e) {
-//         echo "Caught Exception ('{$e->getMessage()}')\n{$e}\n";
-//     }
-// }
-
-// echo '<pre>' . exceptionTest() . '</pre>';

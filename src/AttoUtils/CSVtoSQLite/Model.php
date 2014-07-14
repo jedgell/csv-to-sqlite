@@ -1,6 +1,6 @@
 <?php
 
-namespace \AttoUtils\CSVtoSQLite;
+namespace AttoUtils\CSVtoSQLite;
 
 require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
@@ -10,28 +10,13 @@ class Model {
 
   function __construct(array $configuration) {
 
-    foreach ($configuration as $key => $value) {
-      $this->$key = $value;
-    }
+    // foreach ($configuration as $key => $value) {
+    //   $this->$key = $value;
+    // }
     $this->configuration = $configuration;
     unset($configuration);
     $this->verifyConfiguration();
-
-    switch ($this->configuration['type']) {
-      case 'memory':
-        $this->database = new \PDO('sqlite::memory:');
-        break;
-
-      case 'file':
-        $this->database = new \PDO('sqlite:' . $this->configuration['file_path'] . DIRECTORY_SEPARATOR . $this->configuration['file_name']);
-        break;
-
-      default:
-        break;
-    }
-
-    $this->database->setAttribute(\PDO::ATTR_PERSISTENT, TRUE);
-    $this->database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    $this->createDatabase();
   }
 
   private function verifyConfiguration() {
@@ -41,11 +26,7 @@ class Model {
         throw new Exception(500, array('PDO_SQLITE'));
       }
 
-      if (!isset($this->configuration['file_name']) || empty($this->configuration['file_name'])) {
-          throw new Exception(100, array());
-      }
-
-      switch ($this->configuration['file_name']) {
+      switch ($this->configuration['type']) {
         case 'memory':
           break;
 
@@ -65,13 +46,33 @@ class Model {
           break;
       }
     }
-    catch (\CsvToSqlite\Framework\Exception $e) {
+    catch (Exception $e) {
       echo $e->__toString();
       exit;
     }
   }
-}
 
-$a = new Model(array('type' => 'memory'));
-$a->test = (int)4;
-echo $a;
+  function createDatabase() {
+    try {
+      switch ($this->configuration['type']) {
+        case 'memory':
+          $this->database = new \PDO('sqlite::memory:');
+          break;
+
+        case 'file':
+          $this->database = new \PDO('sqlite:' . $this->configuration['file_path'] . DIRECTORY_SEPARATOR . $this->configuration['file_name']);
+          break;
+
+        default:
+          break;
+      }
+
+      $this->database->setAttribute(\PDO::ATTR_PERSISTENT, TRUE);
+      $this->database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    }
+    catch (\Exception $e) {
+      echo $e->__toString();
+    }
+  }
+
+}
