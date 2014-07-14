@@ -17,14 +17,17 @@ class Exception extends \Exception {
         101 => 'A %s must be provided for SQLite databases of type "%s".',
         102 => 'File(s) for processing not provided for CSVtoSQLite Controller configuration.',
         103 => 'A database configuration was not supplied.',
+        104 => 'Option "%s" has invalid value "%s". Please review documentation.',
+        105 => 'Option "%s" has value "%s". Option "%s" is therefore required to have a value.',
 
         // Programming exceptions.
         200 => 'Required value %s not passed to class %s constructor.',
         201 => 'Required value not passed to method %s',
+        202 => 'User defined function "%s" did not return a value in an expected format.',
 
         // System compatability.
         500 => 'Incompatible environment: extension "%s" not loaded.',
-        501 => 'File "%s" is not readeable by user %s.',
+        501 => 'File "%s" is not writable by user %s.',
         502 => 'Configured file directory (%s) is not writable by user %s.',
     );
 
