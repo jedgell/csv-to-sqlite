@@ -1,6 +1,8 @@
 csv-to-sqlite
 =============
 
+Make CSV files useful!
+
 ## WARNING
 
 This package is still in an __UNDOCUMENTED__ and __UNTESTED__ state. The package is usable (although as of 7/14/2014 not very well tested), but is lacking any real documentation. Please refer to the examples in the doc directory.
