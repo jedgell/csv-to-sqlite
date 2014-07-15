@@ -16,7 +16,7 @@ class File {
   private function validateConfiguration() {
 
     foreach ($this->configuration as $file_name => &$file_options) {
-      if(is_array($file_options)) {
+      if (is_array($file_options)) {
         if (!is_writable(dirname($file_name))) {
           throw new Exception(502, array(dirname($file_name), get_current_user()));
         }
@@ -42,7 +42,7 @@ class File {
               break;
 
             case 'has_header':
-              if (!in_array($value, array(TRUE,FALSE))) {
+              if (!in_array($value, array(TRUE, FALSE))) {
                 throw new Exception(104, array($option, $value));
               }
               break;
@@ -70,7 +70,7 @@ class File {
                   throw new Exception(104, array($option, $callback));
                 }
                 if (!is_array($arguments)) {
-                  throw new Exception($option .': ' . $callback, 'NULL');
+                  throw new Exception($option . ': ' . $callback, 'NULL');
                 }
               }
               break;
@@ -139,7 +139,7 @@ class File {
   }
 
   protected function processTableName($file_name) {
-    if (isset($this->configuration[$file_name]['table_name']) && !empty($this->configuration[$file_name]['table_name'])){
+    if (isset($this->configuration[$file_name]['table_name']) && !empty($this->configuration[$file_name]['table_name'])) {
       if (!preg_match('/^[a-z_\-0-9]+$/i', $this->configuration[$file_name]['table_name'])) {
         $this->configuration[$file_name]['table_name'] = strtolower(preg_replace("/[^\w\d]/ui", '_', $this->configuration[$file_name]['table_name']));
       }
@@ -161,18 +161,19 @@ class File {
 
   protected function processUserLineCallbacks($file_name, &$file_contents) {
     if (isset($this->configuration[$file_name]['line_callbacks']) && !empty($this->configuration[$file_name]['line_callbacks'])) {
-      foreach ($this->configuration[$file_name]['line_callbacks'] as $callback => $arguments) {
-        foreach ($file_contents as &$line) {
-          $line = addslashes($line);
-          $line = str_getcsv($line, $this->configuration[$file_name]['delimeter'], $this->configuration[$file_name]['escape'] . $this->configuration[$file_name]['enclosure']);
+      foreach ($file_contents as &$line) {
+        $line = addslashes($line);
+        $line = str_getcsv($line, $this->configuration[$file_name]['delimeter'], $this->configuration[$file_name]['escape'] . $this->configuration[$file_name]['enclosure']);
+        foreach ($this->configuration[$file_name]['line_callbacks'] as $callback => $arguments) {
           array_push($arguments, $line);
           $line = call_user_func_array($callback, $arguments);
           if (!is_array($line)) {
             throw new Exception(202, array($callback));
           }
-          $line = join($this->configuration[$file_name]['delimeter'], $line);
           array_pop($arguments);
         }
+        $line = join($this->configuration[$file_name]['delimeter'], $line);
+        $line = stripslashes($line);
       }
     }
   }
@@ -186,7 +187,7 @@ class File {
         }
         array_unshift($file_contents, $file_headers);
       }
-      elseif ($this->configuration[$file_name]['has_header'] === FALSE){
+      elseif ($this->configuration[$file_name]['has_header'] === FALSE) {
         array_unshift($new_file_contents, $this->configuration[$file_name]['override_headers']);
       }
     }
@@ -210,4 +211,5 @@ class File {
     $this->configuration[$file_name]['processed_file'] = $processed_directory . DIRECTORY_SEPARATOR . basename($file_name);
     file_put_contents($this->configuration[$file_name]['processed_file'], $file_contents);
   }
+
 }
