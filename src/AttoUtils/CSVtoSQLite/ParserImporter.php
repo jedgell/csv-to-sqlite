@@ -4,7 +4,7 @@ namespace AttoUtils\CSVtoSQLite;
 
 require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-class Controller {
+class ParserImporter {
 
   function __construct(array $configuration) {
     $this->configuration = $configuration;
@@ -40,7 +40,7 @@ class Controller {
   }
 
   function createDatabase() {
-    $this->model = new Model($this->configuration['database']);
+    $this->sqlite = new Database($this->configuration['database']);
   }
 
   function createTables() {
@@ -52,7 +52,7 @@ class Controller {
         id INTEGER PRIMARY KEY,
         " . implode(" TEXT,\r\n", $file_configuration['headers']) . " TEXT)";
       foreach ($statements as $statement) {
-        $this->model->database->exec($statement);
+        $this->sqlite->database->exec($statement);
       }
     }
   }
@@ -68,7 +68,7 @@ class Controller {
       unset($file_contents[0]);
       $sql = "INSERT INTO " . $file_configuration['table_name'] . " (" . implode(', ', $file_configuration['headers']) . ")
         VALUES (" . implode(', ', $placeholders) . ")";
-      $statement = $this->model->database->prepare($sql);
+      $statement = $this->sqlite->database->prepare($sql);
       foreach ($file_contents as $line) {
         $line = addslashes($line);
         $line = str_getcsv($line, $file_configuration['delimeter'], $file_configuration['escape'] . $file_configuration['enclosure']);

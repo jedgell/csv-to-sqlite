@@ -4,9 +4,7 @@ namespace AttoUtils\CSVtoSQLite;
 
 require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-use \AttoUtils\CSVtoSQLite\Exception;
-
-class Model {
+class Database {
 
   function __construct(array $configuration) {
 
@@ -45,8 +43,7 @@ class Model {
         default:
           break;
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       echo $e->__toString();
       exit;
     }
@@ -69,8 +66,7 @@ class Model {
 
       $this->database->setAttribute(\PDO::ATTR_PERSISTENT, TRUE);
       $this->database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       echo $e->__toString();
     }
   }
