@@ -25,7 +25,7 @@ $parsed_csv = new AttoUtils\CSVtoSQLite\ParserImporter($configuration);
 // Yep. That's pretty much it. If your CSV doesn't require much processing, all
 // you need is a simple configuration array and one call and you're done!
 // Uncomment the next line to get a better idea of what's returned.
-var_dump($parsed_csv);
+// var_dump($parsed_csv);
 // Now we have a PDO object, let's put it to use:
 $db = $parsed_csv->sqlite->database;
 // All data is stored as TEXT until https://github.com/jedgell/csv-to-sqlite/issues/4
@@ -41,6 +41,7 @@ foreach ($result as $row) {
   echo "Zero to Sixty in: " . $row['zero_to_sixty'] . " seconds\n";
   echo "\n";
 }
+// Oh. BTW: You got an index on each row for free. How awesome am I?
 // You should see something like this:
 //  Id: 2
 //  Make: AMC Ambassador DPL
