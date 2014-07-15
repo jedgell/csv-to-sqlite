@@ -80,11 +80,9 @@ class File {
           }
         }
       }
-      else {
-        if (!is_readable($this->configuration['files'][$file_name])) {
-          throw new Exception(502, $this->configuration['files'][$file_name]);
-        }
-      }
+    }
+    else {
+      throw new Exception(104, array('filename', 'not an array'));
     }
   }
 
@@ -112,7 +110,6 @@ class File {
   }
 
   protected function processDelimeters($file_name) {
-    if (is_array($this->configuration[$file_name])) {
       if (!isset($this->configuration[$file_name]['delimeter'])) {
         $this->configuration[$file_name]['delimeter'] = ',';
       }
@@ -122,13 +119,6 @@ class File {
       if (!isset($this->configuration[$file_name]['escape'])) {
         $this->configuration[$file_name]['escape'] = '\\';
       }
-    }
-    else {
-      $this->configuration[$file_name] = array(
-        'delimeter' => ',',
-        'enclosure' => '"',
-        'escape' => '\\',
-      );
     }
   }
 
