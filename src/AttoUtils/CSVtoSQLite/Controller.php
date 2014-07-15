@@ -10,8 +10,8 @@ class Controller {
     $this->configuration = $configuration;
     unset($configuration);
     $this->validateConfiguration();
-    $this->processFiles();
     $this->createDatabase();
+    $this->processFiles();
     $this->createTables();
     $this->importFiles();
   }
