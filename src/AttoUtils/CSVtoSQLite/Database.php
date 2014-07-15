@@ -7,10 +7,7 @@ require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 've
 class Database {
 
   function __construct(array $configuration) {
-
-    // foreach ($configuration as $key => $value) {
-    //   $this->$key = $value;
-    // }
+    asort($configuration);
     $this->configuration = $configuration;
     unset($configuration);
     $this->verifyConfiguration();
@@ -54,20 +51,24 @@ class Database {
       switch ($this->configuration['type']) {
         case 'memory':
           $this->database = new \PDO('sqlite::memory:');
+          $this->location = 'sqlite::memory:';
           break;
 
         case 'file':
           $this->database = new \PDO('sqlite:' . $this->configuration['file_path'] . DIRECTORY_SEPARATOR . $this->configuration['file_name']);
+          $this->location = $this->configuration['file_path'] . DIRECTORY_SEPARATOR . $this->configuration['file_name'];
           break;
 
         default:
           break;
       }
-
       $this->database->setAttribute(\PDO::ATTR_PERSISTENT, TRUE);
       $this->database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\Exception $e) {
       echo $e->__toString();
+    }
+    if ($this->database instanceof \PDO) {
+      unset($this->configuration);
     }
   }
 

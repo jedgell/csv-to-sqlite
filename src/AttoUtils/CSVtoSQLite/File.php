@@ -101,7 +101,14 @@ class File {
       $this->processHeaders($file_name, $file_contents);
       $file_contents = join(PHP_EOL, $file_contents);
       $this->saveProcessedFile($file_name, $file_contents);
+      ksort($file_options);
+      foreach ($file_options as $option => $value) {
+        $this->$option = $value;
+      }
+      $this->original_file = $file_name;
+      unset($this->configuration[$file_name]);
     }
+    unset($this->configuration);
   }
 
   protected function processDelimeters($file_name) {

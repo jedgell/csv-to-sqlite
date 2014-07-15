@@ -6,6 +6,8 @@ require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 've
 
 class ParserImporter {
 
+  var $files = array();
+
   function __construct(array $configuration) {
     $this->configuration = $configuration;
     unset($configuration);
@@ -35,22 +37,37 @@ class ParserImporter {
   function processFiles() {
     foreach ($this->configuration['files'] as $file_name => $file_configuration) {
       $file = new File(array($file_name => $file_configuration));
-      $this->configuration['files'][$file_name] = $file->configuration[$file_name];
+      $file_index = count($this->files);
+      $this->files[$file_index] = $file;
+      if ($this->files[$file_index] instanceof File) {
+        unset($this->configuration['files'][$file_name]);
+      }
+    }
+    if (empty($this->configuration['files'])) {
+      unset($this->configuration['files']);
+    }
+    if (empty($this->configuration)) {
+      unset($this->configuration);
     }
   }
 
   function createDatabase() {
     $this->sqlite = new Database($this->configuration['database']);
+    if ($this->sqlite->database instanceof \PDO) {
+      unset($this->configuration['database']);
+    }
   }
 
   function createTables() {
     // @todo: need to allow for column type overrides.
-    foreach ($this->configuration['files'] as $file_configuration) {
+    $count_of_files = count($this->files);
+    for ($i = 0; $i < $count_of_files; $i++) {
+      $file_configuration = $this->files[$i];
       $statements = array();
-      $statements[] = "DROP TABLE IF EXISTS " . $file_configuration['table_name'];
-      $statements[] = "CREATE TABLE " . $file_configuration['table_name'] . "(
+      $statements[] = "DROP TABLE IF EXISTS " . $file_configuration->table_name;
+      $statements[] = "CREATE TABLE " . $file_configuration->table_name . "(
         id INTEGER PRIMARY KEY,
-        " . implode(" TEXT,\r\n", $file_configuration['headers']) . " TEXT)";
+        " . implode(" TEXT,\r\n", $file_configuration->headers) . " TEXT)";
       foreach ($statements as $statement) {
         $this->sqlite->database->exec($statement);
       }
@@ -58,20 +75,22 @@ class ParserImporter {
   }
 
   function importFiles() {
-    foreach ($this->configuration['files'] as $file_configuration) {
-      $placeholders = $file_configuration['headers'];
+    $count_of_files = count($this->files);
+    for ($i = 0; $i < $count_of_files; $i++) {
+      $file_configuration = $this->files[$i];
+      $placeholders = $file_configuration->headers;
       array_walk($placeholders, function (&$value, $key) {
         $value = ':' . $value;
       });
-      $file_contents = file_get_contents($file_configuration['processed_file']);
+      $file_contents = file_get_contents($file_configuration->processed_file);
       $file_contents = explode(PHP_EOL, $file_contents);
       unset($file_contents[0]);
-      $sql = "INSERT INTO " . $file_configuration['table_name'] . " (" . implode(', ', $file_configuration['headers']) . ")
+      $sql = "INSERT INTO " . $file_configuration->table_name . " (" . implode(', ', $file_configuration->headers) . ")
         VALUES (" . implode(', ', $placeholders) . ")";
       $statement = $this->sqlite->database->prepare($sql);
       foreach ($file_contents as $line) {
         $line = addslashes($line);
-        $line = str_getcsv($line, $file_configuration['delimeter'], $file_configuration['escape'] . $file_configuration['enclosure']);
+        $line = str_getcsv($line, $file_configuration->delimeter, $file_configuration->escape . $file_configuration->enclosure);
         $i = 0;
         foreach ($line as $line_item) {
           $statement->bindValue($placeholders[$i], $line_item);
