@@ -26,8 +26,7 @@ class Controller {
       if (!isset($this->configuration['database']) || !is_array($this->configuration['database'])) {
         throw new Exception(103, array());
       }
-    }
-    catch (AttoUtils\CSVtoSQLite\Exception $e) {
+    } catch (AttoUtils\CSVtoSQLite\Exception $e) {
       echo $e->__toString();
       exit;
     }
@@ -46,7 +45,7 @@ class Controller {
 
   function createTables() {
     // @todo: need to allow for column type overrides.
-    foreach ($this->configuration['files'] as $file_name => $file_configuration) {
+    foreach ($this->configuration['files'] as $file_configuration) {
       $statements = array();
       $statements[] = "DROP TABLE IF EXISTS " . $file_configuration['table_name'];
       $statements[] = "CREATE TABLE " . $file_configuration['table_name'] . "(
@@ -59,13 +58,14 @@ class Controller {
   }
 
   function importFiles() {
-    foreach ($this->configuration['files'] as $file_name => $file_configuration) {
+    foreach ($this->configuration['files'] as $file_configuration) {
       $placeholders = $file_configuration['headers'];
       array_walk($placeholders, function (&$value, $key) {
         $value = ':' . $value;
       });
       $file_contents = file_get_contents($file_configuration['processed_file']);
       $file_contents = explode(PHP_EOL, $file_contents);
+      unset($file_contents[0]);
       $sql = "INSERT INTO " . $file_configuration['table_name'] . " (" . implode(', ', $file_configuration['headers']) . ")
         VALUES (" . implode(', ', $placeholders) . ")";
       $statement = $this->model->database->prepare($sql);
@@ -73,12 +73,13 @@ class Controller {
         $line = addslashes($line);
         $line = str_getcsv($line, $file_configuration['delimeter'], $file_configuration['escape'] . $file_configuration['enclosure']);
         $i = 0;
-        foreach($line as $line_item) {
-          $statement->bindValue($placeholders[$i], trim($line_item, '"'));
+        foreach ($line as $line_item) {
+          $statement->bindValue($placeholders[$i], $line_item);
           $i++;
         }
         $statement->execute();
       }
     }
   }
+
 }
