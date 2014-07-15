@@ -45,6 +45,7 @@ class Controller {
   }
 
   function createTables() {
+    // @todo: need to allow for column type overrides.
     foreach ($this->configuration['files'] as $file_name => $file_configuration) {
       $statements = array();
       $statements[] = "DROP TABLE IF EXISTS " . $file_configuration['table_name'];
