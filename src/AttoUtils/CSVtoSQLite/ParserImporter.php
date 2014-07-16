@@ -6,7 +6,19 @@ require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 've
 
 class ParserImporter {
 
+  /**
+   * An array of processed files, keyed by order processed.
+   *
+   * @var mixed
+   */
   var $files = array();
+
+  /**
+   * The current file being processed in processFiles() or FALSE if not.
+   *
+   * @var mixed
+   */
+  var $fileInProcess = FALSE;
 
   function __construct(array $configuration) {
     $this->configuration = $configuration;
@@ -36,12 +48,14 @@ class ParserImporter {
 
   function processFiles() {
     foreach ($this->configuration['files'] as $file_name => $file_configuration) {
+      $this->fileInProcess = $file_name;
       $file = new File(array($file_name => $file_configuration));
       $file_index = count($this->files);
       $this->files[$file_index] = $file;
       if ($this->files[$file_index] instanceof File) {
         unset($this->configuration['files'][$file_name]);
       }
+      $this->fileInProcess = FALSE;
     }
     if (empty($this->configuration['files'])) {
       unset($this->configuration['files']);

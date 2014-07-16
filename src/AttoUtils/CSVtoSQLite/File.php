@@ -6,6 +6,13 @@ require dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 've
 
 class File {
 
+  /**
+   * The current file being processed in processFile() or FALSE if not.
+   *
+   * @var mixed
+   */
+  var $fileInProcess = FALSE;
+
   function __construct(array $configuration) {
     $this->configuration = $configuration;
     unset($configuration);
@@ -88,6 +95,7 @@ class File {
 
   function processFile() {
     foreach ($this->configuration as $file_name => &$file_options) {
+      $this->fileInProcess = $file_name;
       $this->processDelimeters($file_name);
       $this->processHasHeader($file_name);
       $this->processTableName($file_name);
@@ -105,6 +113,7 @@ class File {
       }
       $this->original_file = $file_name;
       unset($this->configuration[$file_name]);
+      $this->fileInProcess = FALSE;
     }
     unset($this->configuration);
   }
