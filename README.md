@@ -22,6 +22,9 @@ Extended configuration options give you the ability to:
 * define per-file callbacks (which receive the full file contents *_may change_) 
 and 
 * per-file-line callbacks (which receive individual rows of data as arrays)
+* rename column headers (which are used to name columns in the table)
+* define per-file table name
+* define the database file's name & location
 
 to manipulate the data before it is dumped into the 
 database. After file manipulation, copies of the files are stored in a 
@@ -30,10 +33,9 @@ manipulation. Future versions of this script may have a configuration option
 to not store the post-processing file, but right now, for performance purposes, 
 that's where it's going.
 
-Other options allow you to rename column headers (which are used to name columns
-in the table) and to define the table's name. Column names, regardless of 
-whether they're overridden or not, are normalized to remove any non 
-alpha-numeric characters (which are replaced with underscores). A header of 
+Other options allow you to  and to define the table's name. Column names,
+regardless of whether they're overridden or not, are normalized to remove any 
+non-alpha-numeric characters (which are replaced with underscores). A header of 
 `2nd set of pix @ beach - New Hope` would become column 
 `2nd_set_of_pix___beach_new_hope`. Perhaps you want to use that override headers
 mapping, huh? With no table name defined, a file named 
