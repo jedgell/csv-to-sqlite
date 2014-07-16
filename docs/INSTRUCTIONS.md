@@ -10,6 +10,13 @@ on a Friday morning. Before closing, I'd come up with a script for automating
 the import of CSV files into an in-memory SQLite DB and returning that database
 as a PDO object for querying. This is an outgrowth of that original script.
 
+## System setup
+Make sure that you have a large amount of RAM dedicated to PHP if you have very
+large CSV files. I'm aware of the file_get_contents() versus the readline 
+approach to opening files. The file_get_contents function was faster for
+prototyping and there are plans to [correct the issue][issue6]. For instructions
+on increasing PHP's allocated memory, [see this post][domem]
+
 ## Basics
 
 See a working example in [simple.php][example1]
@@ -52,8 +59,16 @@ evaluations in your SQL statements:
     $sql = 'SELECT * FROM cars_csv WHERE CAST(zero_to_sixty AS INTEGER) < 9';
     $result = $db->query($sql);
 
-2. Something else.
+2. Upon completing the processing of each file, the script will output the 
+processed file in a subdirectory of the directory in which the original file
+is found. For example, given an original file at `/home/myuser/Docs/file.csv`,
+upon completion of processing, the output file (which is the actual file used
+to do the import) will be located at `/home/myuser/Docs/processed/file.csv`.
 
+
+
+[cast]:http://www.sqlite.org/lang_expr.html#castexpr
+[domem]:https://www.drupal.org/node/207036
 [example1]:./examples/simple.php
 [issue4]:https://github.com/jedgell/csv-to-sqlite/issues/4
-[cast]:http://www.sqlite.org/lang_expr.html#castexpr
+[issue6]:https://github.com/jedgell/csv-to-sqlite/issues/6

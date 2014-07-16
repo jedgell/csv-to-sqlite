@@ -22,16 +22,20 @@ Extended configuration options give you the ability to:
 * define per-file callbacks (which receive the full file contents *_may change_) 
 and 
 * per-file-line callbacks (which receive individual rows of data as arrays)
+* each CSV file stored to it's own SQLite database table
 * rename column headers (which are used to name columns in the table)
 * define per-file table name
 * define the database file's name & location
 
-to manipulate the data before it is dumped into the 
-database. After file manipulation, copies of the files are stored in a 
-subdirectory of the directory in which the original file resides showing all 
-manipulation. Future versions of this script may have a configuration option 
-to not store the post-processing file, but right now, for performance purposes, 
-that's where it's going.
+to manipulate the data before it is dumped into the database. 
+
+After file manipulation, copies of the files are stored in a 
+subdirectory of the directory in which the original file resides  (I'm 
+explaining this poorly; given a csv file at `/home/myaccount/Docs/file.csv`, the 
+final file would be located at `/home/myaccount/Docs/processed/file.csv)`. These
+versions show all the result of all the file manipulation procedures. Future 
+versions of this script may have a configuration option to not store the 
+post-processing file, but right now, that's what's happening.
 
 Other options allow you to  and to define the table's name. Column names,
 regardless of whether they're overridden or not, are normalized to remove any 
@@ -57,4 +61,14 @@ the output in a third file.
 
 Or you could have fun.
 
+## Resources:
+* Car and Earthquake data originally from [exposedata.com][edata]
+* Have questions? Check out the [issue queue][issues]
+* Original concept highly influenced by [this post][inttf1] on 
+[if-not-true-then-false.com][inttf0]
+
+[inttf0]:http://www.if-not-true-then-false.com/
+[inttf1]:http://www.if-not-true-then-false.com/2012/php-pdo-sqlite3-example/
 [instructions]:docs/examples/INSTRUCTIONS.md
+[edata]: http://exposedata.com/parallel/upload.html
+[issues]:https://github.com/jedgell/csv-to-sqlite/
