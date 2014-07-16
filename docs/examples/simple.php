@@ -8,11 +8,11 @@
 // free to hardcode it.
 include_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'AttoUtils' . DIRECTORY_SEPARATOR . 'CSVtoSQLite' . DIRECTORY_SEPARATOR . 'ParserImporter.php';
 
-
+// These are the minimum required fields for a disk-based SQLite database.
 $configuration = array(
   'database' => array(
     'type' => 'file',
-    // For file_path, we could simply use './data/processed'. See above.
+    // For file_path, we could simply use '/full/path/to/data/processed'.
     'file_path' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'processed',
     'file_name' => 'example.sqlite3',
   ),
